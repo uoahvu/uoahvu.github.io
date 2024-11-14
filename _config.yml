@@ -114,7 +114,7 @@ analytics:
 # Site Author
 author:
   name             : "Nayeon Park"
-  avatar           : "/assets/images/bio-image.jpg"
+  avatar           : "/assets/images/bio_image.jpg"
   bio              : "Data Scientist"
   location         : "South Korea"
   email            :
