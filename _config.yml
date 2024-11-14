@@ -326,3 +326,6 @@ defaults:
       show_date: true
 
 date_format: "%Y-%m-%d"
+disqus:
+  comments: true
+  shortname: 'uoahvu.github.io'
