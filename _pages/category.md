@@ -1,7 +1,7 @@
 ---
 permalink: /categories/
+layout: categories
 title: "Category"
-toc: true
-toc_sticky: true
-toc_label: "CATEGORY"
+author_profile: true
+sidbar_main: true
 ---
