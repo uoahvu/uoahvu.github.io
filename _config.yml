@@ -123,7 +123,7 @@ author:
       icon: "fas fa-fw fa-envelope-square"
       url: "mailto:uoahvu@gmail.com"
     - label: "LinkedIn"
-      icon: "fab fa-linkedin-square"
+      icon: "fas fa-fw fa-link"
       url: "https://www.linkedin.com/in/nayeon-park-b29273266"
     # - label: "Twitter"
     #   icon: "fab fa-fw fa-twitter-square"
@@ -329,4 +329,4 @@ date_format: "%Y-%m-%d"
 
 disqus:
   comments: true
-  shortname: 'uoahvu-github-io'
+  shortname: uoahvu-github-io
