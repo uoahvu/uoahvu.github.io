@@ -15,13 +15,13 @@
 minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale                   : "UTF-8"
+locale                   : "ko-KR"
 rtl                      : # true, false (default) # turns direction of the page into right to left for RTL languages
 title                    : "Data Science Works"
-title_separator          : "-"
+title_separator          : "|"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Nayeon Park"
-description              : "An amazing website."
+# description              : ""
 url                      : "https://uoahvu.github.io/"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "uoahvu/uoahvu.github.io.git"
@@ -323,3 +323,6 @@ defaults:
       comments: # true
       share: true
       related: true
+      show_date: true
+
+date_format: "%Y-%m-%d"
