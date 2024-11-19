@@ -4,6 +4,13 @@
 
 * { box-sizing: border-box; }
 
+// _variables.scss 또는 스타일 파일
+$doc-font-size: 14px; // 기존 크기보다 작게 설정
+$doc-font-size-medium: 15px;
+$doc-font-size-large: 16px;
+$doc-font-size-x-large: 18px;
+
+
 html {
   /* apply a natural box layout model to all elements */
   box-sizing: border-box;
@@ -134,7 +141,7 @@ input,
 select,
 textarea {
   margin: 0;
-  font-size: 75%;
+  font-size: 100%;
   vertical-align: middle;
 }
 
