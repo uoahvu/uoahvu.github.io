@@ -4,29 +4,24 @@
 
 * { box-sizing: border-box; }
 
-// _variables.scss 또는 스타일 파일
-$doc-font-size: 14px; // 기존 크기보다 작게 설정
-$doc-font-size-medium: 15px;
-$doc-font-size-large: 16px;
-$doc-font-size-x-large: 18px;
 
 
 html {
   /* apply a natural box layout model to all elements */
   box-sizing: border-box;
   background-color: $background-color;
-  font-size: $doc-font-size;
+  font-size: 14px;
 
   @include breakpoint($medium) {
-    font-size: $doc-font-size-medium;
+    font-size: 14px;
   }
 
   @include breakpoint($large) {
-    font-size: $doc-font-size-large;
+    font-size: 16px;
   }
 
   @include breakpoint($x-large) {
-    font-size: $doc-font-size-x-large;
+    font-size: 18px;
   }
 
   -webkit-text-size-adjust: 100%;
