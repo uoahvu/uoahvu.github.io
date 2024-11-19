@@ -1,6 +1,8 @@
 ---
 layout: single
 title: "소비자가 구매할 가능성이 높은 Top K 상품 추천모델링 (Session-based Recommendation)"
+excerpt: "구매이력 데이터를 기반으로 유저가 구매할만한 상품을 제공하는 추천시스템을 구현한다."
+last_modified_at: 2024-11-19
 comments: true
 categories: Recommendation
 ---
