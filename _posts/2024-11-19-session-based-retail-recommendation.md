@@ -16,11 +16,7 @@ categories: Recommendation
 [🗂️ Kaggle : Retailrocket recommender system dataset](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset)
 
 
-<center>
-
 ![image](https://github.com/user-attachments/assets/770ba6af-ab47-466b-b7f8-5a41256eaf25)
-
-</center>
 
 
 Kaggle의 retailrocket 상품소비이력 데이터셋을 사용하며, 해당 데이터셋은 전자상거래 웹사이트에 방문한 유저의 행동 데이터(events.csv), 상품의 속성 데이터(item_properties.csv), 카테고리 트리 데이터(category_tree.csv)로 이루어져 있다.
@@ -127,14 +123,12 @@ Concat 된 벡터는 LSTM Layer로 입력되며, Linear Layer 를 통해 모든 
 
 모델의 예측값은 실제값과 비교하여 Loss 가 만들어진다. 실제 값은 유저가 세션 내에서 실제로 구매하거나 장바구니에 담았다면 1, 그렇지 않다면 0에 해당한다.
 
-<center>
 
 $ target \begin{cases}
 1 & \text{ if } x= (addtocart, transaction)\\
 0 & \text{ if } x= (view)
 \end{cases}$
 
-</center>
 
 처음에는 기본 CrossEntropyLoss를 사용하여 Loss 를 정의해 학습을 진행했으나, 여러 시도 끝에 최종적으로 `Hard Negative Loss`와 `Weighted Positive Loss`를 합쳐 사용했다.
 
