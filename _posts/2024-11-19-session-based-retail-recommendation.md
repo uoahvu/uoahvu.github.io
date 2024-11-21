@@ -5,6 +5,7 @@ excerpt: "[Kaggle Retailrocket] 구매이력 데이터를 기반으로 유저가
 last_modified_at: 2024-11-21
 comments: true
 categories: Recommendation
+use_math: true
 ---
 
 # 🛒 Data Processing
