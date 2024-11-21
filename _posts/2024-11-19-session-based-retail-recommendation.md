@@ -3,6 +3,7 @@ layout: single
 title: "소비자가 구매할 가능성이 높은 Top K 상품 추천모델링 (Session-based Recommendation)"
 excerpt: "[Kaggle Retailrocket] 구매이력 데이터를 기반으로 유저가 구매할만한 상품을 제공하는 추천시스템"
 last_modified_at: 2024-11-21
+toc: true
 comments: true
 categories: Recommendation
 use_math: true
@@ -170,11 +171,14 @@ weighted_loss = torch.mean(
 
 성능지표는 Recall@k 와 Precision@k 두가지를 추출했다. 최종적으로 모델이 내놓은 예측값을 기준으로 Top-5를 선정해서 실제값과의 교집합을 분자로 사용한다. 
 
-실제값이 보통 5개를 넘지 않아 Recall@5 지표의 성능이 높게 나올 수 밖에 없는 구조였다.
+
+![image](https://github.com/user-attachments/assets/1d31280c-a16f-42b1-85a8-5bc46c0725bb)
+
+Epoch 100 수행 중 Test Recall@k은 최대 0.14 를 기록했다.
 
 
 
 # Result
 
-모델 학습 및 테스트 전체 코드는 
+
 💫 [Github - Session-based-retail-recommendation Code(Pytorch)](https://github.com/uoahvu/session-based-retail-recommendation)
