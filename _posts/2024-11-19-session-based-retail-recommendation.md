@@ -125,10 +125,10 @@ Concat 된 벡터는 LSTM Layer로 입력되며, Linear Layer 를 통해 모든 
 모델의 예측값은 실제값과 비교하여 Loss 가 만들어진다. 실제 값은 유저가 세션 내에서 실제로 구매하거나 장바구니에 담았다면 1, 그렇지 않다면 0에 해당한다.
 
 
-$$ target \begin{cases}
+$$ \text{target} \begin{cases}
 1 & \text{ if } x= (addtocart, transaction)\\
 0 & \text{ if } x= (view)
-\end{cases}$$
+\end{cases} $$
 
 
 처음에는 기본 CrossEntropyLoss를 사용하여 Loss 를 정의해 학습을 진행했으나, 여러 시도 끝에 최종적으로 `Hard Negative Loss`와 `Weighted Positive Loss`를 합쳐 사용했다.
