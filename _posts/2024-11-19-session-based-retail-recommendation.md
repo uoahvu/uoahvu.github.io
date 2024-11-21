@@ -4,7 +4,6 @@ title: "소비자가 구매할 가능성이 높은 Top K 상품 추천모델링 
 excerpt: "[Kaggle Retailrocket] 구매이력 데이터를 기반으로 유저가 구매할만한 상품을 제공하는 추천시스템"
 last_modified_at: 2024-11-21
 toc: true
-toc_sticky: false
 comments: true
 categories: Recommendation
 use_math: true
@@ -128,12 +127,12 @@ Concat 된 벡터는 LSTM Layer로 입력되며, Linear Layer 를 통해 모든 
 
 
 $$
-target = 
 \begin{cases} 
 1 & \text{if } x = (\text{addtocart}, \text{transaction}) \\ 
 0 & \text{if } x = (\text{view})
 \end{cases}
 $$
+
 
 
 처음에는 기본 CrossEntropyLoss를 사용하여 Loss 를 정의해 학습을 진행했으나, 여러 시도 끝에 최종적으로 `Hard Negative Loss`와 `Weighted Positive Loss`를 합쳐 사용했다.
@@ -180,7 +179,7 @@ Epoch 100 수행 중 Test Recall@k은 최대 0.14 를 기록했다.
 
 
 
-# Result
+# 🧑‍💻 Code
 
 
 💫 [Github - Session-based-retail-recommendation Code(Pytorch)](https://github.com/uoahvu/session-based-retail-recommendation)
