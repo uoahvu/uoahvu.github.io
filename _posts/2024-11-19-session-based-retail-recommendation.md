@@ -1,19 +1,27 @@
 ---
 layout: single
 title: "소비자가 구매할 가능성이 높은 Top K 상품 추천모델링 (Session-based Recommendation)"
-excerpt: "구매이력 데이터를 기반으로 유저가 구매할만한 상품을 제공하는 추천시스템"
-last_modified_at: 2024-11-20
+excerpt: "[Kaggle Retailrocket] 구매이력 데이터를 기반으로 유저가 구매할만한 상품을 제공하는 추천시스템"
+last_modified_at: 2024-11-21
 comments: true
 categories: Recommendation
 ---
 
-# Data Processing
+# 🛒 Data Processing
 
 ## Retailrocket recommender system dataset
 
 구매이력 데이터를 기반으로 유저가 구매할만한 상품을 제공하는 추천시스템을 구현한다.
 
 [🗂️ Kaggle : Retailrocket recommender system dataset](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset)
+
+
+<center>
+
+![image](https://github.com/user-attachments/assets/770ba6af-ab47-466b-b7f8-5a41256eaf25)
+
+</center>
+
 
 Kaggle의 retailrocket 상품소비이력 데이터셋을 사용하며, 해당 데이터셋은 전자상거래 웹사이트에 방문한 유저의 행동 데이터(events.csv), 상품의 속성 데이터(item_properties.csv), 카테고리 트리 데이터(category_tree.csv)로 이루어져 있다.
 
@@ -51,6 +59,7 @@ Kaggle의 retailrocket 상품소비이력 데이터셋을 사용하며, 해당 �
 
 ---
 
+## Define Model Inputs & Outputs
 
 >![image](https://github.com/user-attachments/assets/776f0b48-81a8-414a-a8a8-03007b2e3fe4)
 그림 1. How to define a session in this project
@@ -82,7 +91,7 @@ Kaggle의 retailrocket 상품소비이력 데이터셋을 사용하며, 해당 �
 
 
 
-# Session Based Recommendations with LSTM
+# 🎯 Session Based Recommendations with LSTM
 
 
 >![image](https://github.com/user-attachments/assets/c369f020-1d3d-4c0d-bff9-30778e571019)
@@ -93,15 +102,39 @@ Kaggle의 retailrocket 상품소비이력 데이터셋을 사용하며, 해당 �
 
 ## Candidate Generation
 
+전체 상품의 개수는 약 3만개로, 매우 많았으므로 후보 생성 과정이 필요했다. 각 상품은 카테고리, 부모 카테고리 인덱스를 가지고 있으며, 정의한 세션의 특성 상 지속시간이 짧고 봤던 상품 내에서 추천하는 것이 추천 성능에 직접적인 도움을 주었기에, **같은 부모 카테고리(parent id)**를 가진 상품들을 후보군으로 선정했다. 
+
+후보군 생성 과정은 Test Set 의 성능평가 시에만 진행했다.
 
 
-## LSTM Structure
+## LSTM Structure for Top-K Ranking
 
+>![image](https://github.com/user-attachments/assets/52605869-cc91-4013-b4bc-975da79780df)
+그림 5. SessionLSTM Structure
 
+유저가 좋아할만한 Top-K 상품을 추출하기 위한 모델은 LSTM 을 사용했다. 모델의 전체 구조는 위와 같다. 
 
+먼저 각 상품의 id, 카테고리 id, 부모카테고리 id 를 각각 임베딩하여 Concat 한다.
+
+Concat 된 벡터는 LSTM Layer로 입력되며, Linear Layer 를 통해 모든 상품별 확률값을 내뱉을 수 있도록 했다.
+
+* `self.out_layer = nn.Linear(hidden_size, num_items)`
+
+각 상품에 대한 선호도(=구매확률)는 0과 1사이의 실수값으로 나타내도록 Sigmoid 함수를 통과하여 마무리했다.
 
 
 ## Loss Function
+
+모델의 예측값은 실제값과 비교하여 Loss 가 만들어진다. 실제 값은 유저가 세션 내에서 실제로 구매하거나 장바구니에 담았다면 1, 그렇지 않다면 0에 해당한다.
+
+<center>
+
+$ target \begin{cases}
+1 & \text{ if } x= (addtocart, transaction)\\
+0 & \text{ if } x= (view)
+\end{cases}$
+
+</center>
 
 처음에는 기본 CrossEntropyLoss를 사용하여 Loss 를 정의해 학습을 진행했으나, 여러 시도 끝에 최종적으로 `Hard Negative Loss`와 `Weighted Positive Loss`를 합쳐 사용했다.
 
@@ -130,8 +163,21 @@ weighted_loss = torch.mean(
 
 
 
-## Evaluation
+# 🪄 Evaluation
 
-### Recall@k, Precision@k
+## Recall@k, Precision@k
 
 
+>![image](https://github.com/user-attachments/assets/1edf68f5-5c88-49bd-b6b7-7dd8da28132a)
+그림 6. How to calculate RECALL, PRECISION
+
+성능지표는 Recall@k 와 Precision@k 두가지를 추출했다. 최종적으로 모델이 내놓은 예측값을 기준으로 Top-5를 선정해서 실제값과의 교집합을 분자로 사용한다. 
+
+실제값이 보통 5개를 넘지 않아 Recall@5 지표의 성능이 높게 나올 수 밖에 없는 구조였다.
+
+
+
+# Result
+
+모델 학습 및 테스트 전체 코드는 
+💫 [Github - Session-based-retail-recommendation Code(Pytorch)](https://github.com/uoahvu/session-based-retail-recommendation)
