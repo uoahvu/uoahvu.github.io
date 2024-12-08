@@ -34,7 +34,7 @@ use_math: true
 
 
 
-## Data Preprocessing
+## 🧑‍💻 Data Preprocessing
 
 유사도 기반 검색을 위해 각 회차별 콘텐츠를 최적의 임베딩 벡터로 표현하기 위한 데이터 전처리 과정을 거쳤다.  
 
@@ -117,6 +117,46 @@ df["title_"] = df["title"].str.replace(r"[무한도전]", "")
 각 회차의 특징을 표현하는 데 가장 중요한 단서를 제공하는 것은 텍스트라고 생각한다. 
 제목 텍스트에서 공통적으로 등장하는 `"무한도전"` 은 삭제하고, 설명텍스트는 특수문자 등을 제외한 한글&영어&숫자 로만 구성되도록 전처리한다.
 
+
+## 📖 Embedding Model
+
+>![image](https://github.com/user-attachments/assets/7b72fe8a-7802-4ac9-90f4-62aaa23e34ee)
+그림 5. 회차별 임베딩 벡터 구성도
+
+전처리된 데이터는 임베딩 벡터로 표현된다. 시즌, 특집회 여부, 제목 및 설명 텍스트가 Feature로 사용되며 그림 5와 같은 임베딩 과정을 거친다.
+시즌은 길이가 64인 임베딩 벡터로 표현하여 각 시즌의 특징이 학습될 수 있도록 한다. 특집 여부는 1과 0으로 표현되었으며, One-Hot 인코딩하여 표현한다.
+
+
+### Sentence Transformer 기반 사전 학습 텍스트 임베딩 모델
+
+```python
+from sentence_transformers import SentenceTransformer
+
+class ContentEmbedding(nn.Module):
+    def __init__(self, hidden_size, num_season):
+        super(ContentEmbedding, self).__init__()
+        ...
+        self.description_embedding = SentenceTransformer(
+            "sentence-transformers/all-MiniLM-L6-v2"
+        )
+    def forward(self, x):
+        ...
+        # 제목텍스트
+        embedded_title = torch.tensor(
+            self.description_embedding.encode(x.loc[:, "title_"])
+        )
+        # 설명텍스트
+        embedded_description = torch.tensor(
+            self.description_embedding.encode(x.loc[:, "description"])
+        )
+        ...
+```
+
+위 코드는 콘텐츠 임베딩 모델의 일부이다. 제목 및 설명 텍스트를 임베딩하기 위해 sentence_transformers 패키지의 SentenceTransformer 모델을 사용한다.
+그 중 [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) 은 다국어 데이터셋으로 사전학습된 모델로, 문장에 대한 384 차원의 임베딩 벡터를 도출할 수 있다.
+
+
+## FAISS(Vector Store)
 
 
 # Pair-Wise Ranking Model
