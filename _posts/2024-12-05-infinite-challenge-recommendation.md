@@ -2,7 +2,7 @@
 layout: single
 title: "PAIR-WISE 기반 취향 랭킹 학습으로 무한도전 콘텐츠 추천하기"
 excerpt: "[Crawling Dataset] 콘텐츠 기반 임베딩 Retrieval 과 Pair-wise Ranking Model을 결합한 동영상 추천 시스템"
-last_modified_at: 2024-12-08
+last_modified_at: 2024-12-10
 toc: true
 comments: true
 categories: Recommendation
@@ -38,7 +38,7 @@ use_math: true
 
 유사도 기반 검색을 위해 각 회차별 콘텐츠를 최적의 임베딩 벡터로 표현하기 위한 데이터 전처리 과정을 거쳤다.  
 
-#### 🧐 Feature 1 ) 무한도전 시즌
+### - Feature 1 ) 무한도전 시즌
 
 무한도전은 약 13년간 방영한 프로그램으로, 기간 내 크고작은 멤버 구성 변화가 잦았다. 멤버의 구성에 따라 회차별 선호도가 달라진다는 점을 반영하기 위해 방영일자별 시즌을 나누어 콘텐츠 벡터에 반영했다.
 
@@ -70,7 +70,7 @@ def date2season(x):
 멤버 구성을 기준으로 시즌을 정의했으며, 필자는 개인적으로 7인체제를 좋아한다.
 
 
-#### 👀 Feature 2 ) 특집회 여부
+### - Feature 2 ) 특집회 여부
 
 >![image](https://github.com/user-attachments/assets/e3b1e0a0-80aa-4a72-9ae2-7155d2ba1a27)
 그림 4. 특집회
@@ -82,7 +82,7 @@ df["special"] = df["vod_num"].apply(lambda x: 1 if x == "특집회" else 0)
 ```
 
 
-#### 🎞️ Feature 3 ) 런타임
+### - Feature 3 ) 런타임
 
 ```python
 def timestr2min(x):
@@ -100,7 +100,7 @@ def timestr2min(x):
 
 
 
-#### 🪄 Feature 4 ) 제목 및 설명
+### - Feature 4 ) 제목 및 설명
 
 
 
@@ -127,7 +127,7 @@ df["title_"] = df["title"].str.replace(r"[무한도전]", "")
 시즌은 길이가 64인 임베딩 벡터로 표현하여 각 시즌의 특징이 학습될 수 있도록 한다. 특집 여부는 1과 0으로 표현되었으며, One-Hot 인코딩하여 표현한다.
 
 
-### 🪄 Sentence Transformer : 사전 학습 텍스트 임베딩 모델
+### - Sentence Transformer : 사전 학습 텍스트 임베딩 모델
 
 ```python
 from sentence_transformers import SentenceTransformer
@@ -219,7 +219,7 @@ loss = triplet_loss(anchor_embeddings, positive_embeddings, negative_embeddings)
 
 
 
-# Recommendation Flow
+# 🪄 Recommendation Flow
 
 
 
