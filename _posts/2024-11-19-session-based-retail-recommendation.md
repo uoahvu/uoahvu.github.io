@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "소비자가 구매할 가능성이 높은 Top K 상품 추천모델링 (Session-based Recommendation)"
+title: "소비자가 구매할 가능성이 높은 Top K 상품 추천모델링"
 excerpt: "[Kaggle Retailrocket] 구매이력 데이터를 기반으로 유저가 구매할만한 상품을 제공하는 추천시스템"
 last_modified_at: 2024-11-21
 toc: true

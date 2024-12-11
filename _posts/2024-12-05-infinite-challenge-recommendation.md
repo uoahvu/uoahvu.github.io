@@ -2,7 +2,7 @@
 layout: single
 title: "PAIR-WISE 기반 취향 랭킹 학습으로 무한도전 콘텐츠 추천하기"
 excerpt: "[Crawling Dataset] 콘텐츠 기반 임베딩 Retrieval 과 Pair-wise Ranking Model을 결합한 동영상 추천 시스템"
-last_modified_at: 2024-12-10
+last_modified_at: 2024-12-11
 toc: true
 comments: true
 categories: Recommendation
@@ -176,10 +176,21 @@ def candidate_generator(index, query, k):
 
 각 콘텐츠를 임베딩 벡터로 표현했다면, FAISS Vector Store에 저장하여 사용한다. 이 후 추천 시 유저가 시청하고 있는 콘텐츠와 유사한 콘텐츠를 검색하기 위해 `candidate_generator` 함수를 사용하여 search 할 수 있다.
 
+<br/>
 
+---
 
 # 🤼 Pair-Wise Ranking Model
 
+## 🗒️ Preference Survey
+
+본 추천시스템의 구현 전제는 유저의 이력 데이터가 존재하지 않는 경우이므로 간단한 선호 조사를 기반으로 작동하도록 했다. 유저에게 한쌍의 콘텐츠를 제시하면, 유저는 둘 중 더 선호하는 콘텐츠를 선택한다.
+
+
+>![image](https://github.com/user-attachments/assets/53e10836-b264-43b3-95b2-1a590b4734a9)
+그림 6. Example of Preference Survey
+
+둘 다 별로인 경우는 학습에서 제외하고, 하나 이상 좋다고 대답한 경우를 학습에 포함했다. (그림 6의 1,2,3) 선호도 조사 결과는 아래 설명할 `Triplet Margin Loss` 에 적용된다.
 
 
 ## 👩‍👧‍👦 Triplet Margin Loss
@@ -188,7 +199,8 @@ def candidate_generator(index, query, k):
 본 추천시스템의 목적은 유저의 취향을 반영하여 콘텐츠 벡터를 재학습하고, 콘텐츠 벡터가 단순히 내용만이 아닌 유저의 취향까지 내포하도록 하는 것이다.
 
 
-![image](https://github.com/user-attachments/assets/130766af-85ef-402f-9afd-0e24ceed5f3f)
+>![image](https://github.com/user-attachments/assets/130766af-85ef-402f-9afd-0e24ceed5f3f)
+그림 7. How to do Learning To Rank
 
 ```python
 anchor_embeddings = self.embeddings(torch.tensor(anchors, dtype=torch.long))
@@ -202,8 +214,8 @@ loss = triplet_loss(anchor_embeddings, positive_embeddings, negative_embeddings)
 이 때 기준은 선호하는 콘텐츠이며, 이와 같은 그룹은 내용 유사도가 높은 콘텐츠, 다른 그룹은 선호하지 않는 콘텐츠로 정의했다. 
 
 
-![image](https://github.com/user-attachments/assets/ab863ccc-6438-4825-b5e1-4cb200cf4021)
-
+>![image](https://github.com/user-attachments/assets/ab863ccc-6438-4825-b5e1-4cb200cf4021)
+그림 8. How to apply Triplet Margin Loss
 
 예를 들어, 유저가 <돈가방을 찾아라!> 를 <서해안 고속도로 가요제> 보다 더 재밌게 시청했다고 답한 경우, 
 기준이 되는 <돈가방을 찾아라!> 콘텐츠는 그와 유사한 콘텐츠(100빡빡이의 습격 ...)들과 가까워지도록 학습되며 그와 반대로 선택하지 않은 <서해안 고속도로 가요제>를 포함하여 유사한 콘텐츠와는 멀어지도록 학습된다.
@@ -216,11 +228,19 @@ loss = triplet_loss(anchor_embeddings, positive_embeddings, negative_embeddings)
 > 오히려 Positive 콘텐츠가 추천순위에서 밀려나게 되는 것이다(벡터 유사도가 낮으므로). 유저는 좋아하는 콘텐츠를 시청하고 있을 것이라는 가정하에 단순히 설계된 모델의 한계점이다. 
 
 
+본 Loss 를 적용한 학습은 Epoch 100 회 시행했으며, 이는 모델의 하이퍼파라미터 값이다.
 
 
+<br/>
+
+---
 
 # 🪄 Recommendation Flow
 
+>![image](https://github.com/user-attachments/assets/b542715d-21db-41e4-95fa-53da128db43d)
+그림 9. 취향 학습 후 콘텐츠 랭킹 변화
+
+그림 9는 모델 학습을 마친 후, 특정 콘텐츠에 대한 유사도 기반 랭킹 추출 결과이다. 실제 출력값을 재구성하였으며, 좌측은 기존 내용 기반의 콘텐츠 벡터 기반의 추천 결과, 우측은 PAIR RANKING 취향 학습 후 추천 결과이다. 새롭게 올라온 콘텐츠와 삭제된 콘텐츠도 있고, 기존 추천결과에서 순서만 섞인 것도 존재하는 것을 확인할 수 있었다.
 
 
 # 🧑‍💻 Code
